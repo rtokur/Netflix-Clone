@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class MovieVC: UIViewController {
+class HomeVC: UIViewController {
     private var movieViewModel = MovieViewModel()
     
     private let stackView = UIStackView()
@@ -26,7 +26,7 @@ class MovieVC: UIViewController {
     }
     
     private func setupViews() {
-        view.backgroundColor = .white
+        view.backgroundColor = .black
         
         stackView.axis = .vertical
         stackView.spacing = 16
@@ -67,7 +67,7 @@ class MovieVC: UIViewController {
     }
 }
 
-extension MovieVC : MovieViewModelDelegate {
+extension HomeVC : MovieViewModelDelegate {
     func moviesDidUpdate(movies: [Movie]) {
         DispatchQueue.main.async {
             self.activityIndicator.stopAnimating()
@@ -99,7 +99,7 @@ extension MovieVC : MovieViewModelDelegate {
     }
 }
 
-extension MovieVC: UITableViewDataSource, UITableViewDelegate {
+extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return movieViewModel.movies.count
     }

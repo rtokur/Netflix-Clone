@@ -10,10 +10,13 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        // MARK: - Setting up the window and root view controller
+        window = UIWindow()
+        window?.rootViewController = MovieVC()
+        window?.makeKeyAndVisible()
         return true
     }
 

@@ -15,6 +15,7 @@ struct Movie: Identifiable,Codable,Equatable {
     let releaseDate:String?
     let posterPath:String?
     let genreIds: [Int]?
+    let vote: Double
     
     // MARK: - Computed Properties
     var posterURL: URL? {
@@ -31,5 +32,6 @@ struct Movie: Identifiable,Codable,Equatable {
         case releaseDate = "release_date"
         case posterPath = "poster_path"
         case genreIds = "genre_ids"
+        case vote = "vote_average"
     }
 }

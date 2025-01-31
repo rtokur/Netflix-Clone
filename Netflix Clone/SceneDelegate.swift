@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         // MARK: - Setting up the window and root view controller
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = MovieVC()
+        window.rootViewController = MainTabBarViewController()
         self.window = window
         window.makeKeyAndVisible()
     }

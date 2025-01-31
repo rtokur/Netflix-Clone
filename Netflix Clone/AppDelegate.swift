@@ -15,7 +15,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // MARK: - Setting up the window and root view controller
         window = UIWindow()
-        window?.rootViewController = MovieVC()
+        let navController = UINavigationController()
+        window?.rootViewController = MainTabBarViewController()
+        navController.popToRootViewController(animated: true)
         window?.makeKeyAndVisible()
         return true
     }

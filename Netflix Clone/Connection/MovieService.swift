@@ -53,6 +53,11 @@ class MovieService {
         return response.results
     }
     
+    //MARK: -Fetching Top Rated Movies From API
+    func fetchTopRatedMovies() async throws->[Movie]{
+        let response:MovieResponse = try await fetchData(path: "/movie/top_rated", queryItems: [URLQueryItem(name: "page", value: "1")], methodName: "top rated movies")
+        return response.results
+    }
     //MARK: -Fetching Videos
     func fetchMovieVideos(movieId:Int) async throws->[Video] {
         let response: VideoResponse = try await fetchData(path: "/movie/\(movieId)/videos", queryItems: [], methodName: "movie videos")

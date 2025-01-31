@@ -15,6 +15,11 @@ class MovieViewModel: NSObject {
             delegate?.moviesDidUpdate(movies: movies)
         }
     }
+    var topRated: [Movie] = [] {
+        didSet {
+            delegate?.moviesDidUpdate(movies: topRated)
+        }
+    }
     // MARK: - List of genres to be used for filtering and displaying.
     var genres: [Genre] = [] {
         didSet {
@@ -44,34 +49,42 @@ class MovieViewModel: NSObject {
     // MARK: - Loads both movies and genres concurrently and updates the ViewModel.
     func loadMoviesAndGenres() async {
         performAsyncOperation {
-            let (fetchedMovies, fetchedGenres) = try await withThrowingTaskGroup(of: (movies: [Movie]?, genres:[Genre]?).self) {group in
+            let (fetchedMovies, fetchedTopRated, fetchedGenres): ([Movie]?, [Movie]?, [Genre]?) = try await withThrowingTaskGroup(of: (movies: [Movie]?, topRated: [Movie]?, genres: [Genre]?).self) { group in
+                
                 var movies: [Movie]?
+                var topRated: [Movie]?
                 var genres: [Genre]?
                 
                 group.addTask {
-                    (try await self.fetchMovies(), nil)
+                    (try await self.fetchPopularrMovies(), nil, nil)
                 }
                 
                 group.addTask {
-                    (nil, try await self.fetchGenres())
+                    (nil, try await self.fetchTopRatedMovies(), nil)
                 }
                 
-                for try await (partialMovies, partialGenres) in group {
-                    if let partialMovies = partialMovies { movies = partialMovies}
-                    if let partialGenres = partialGenres { genres = partialGenres}
+                group.addTask {
+                    (nil, nil, try await self.fetchGenres())
                 }
-                return (movies , genres)
+                for try await (partialMovies, partialTopRated, partialGenres) in group {
+                    if let partialMovies = partialMovies { movies = partialMovies }
+                    if let partialTopRated = partialTopRated { topRated = partialTopRated }
+                    if let partialGenres = partialGenres { genres = partialGenres }
+                }
+                
+                return (movies, topRated, genres)
             }
             
             if let fetchedMovies = fetchedMovies {
                 self.movies = fetchedMovies
             }
+            if let fetchedTopRated = fetchedTopRated {
+                self.topRated = fetchedTopRated
+            }
             if let fetchedGenres = fetchedGenres {
                 self.genres = fetchedGenres
             }
-                
         }
-        
     }
     // MARK: - Searches for movies based on title and genre.
     func searchMovies(title: String, genre: Genre?) {
@@ -92,12 +105,17 @@ class MovieViewModel: NSObject {
             
             self?.movies = []
             self?.genres = []
+            self?.topRated = []
             await self?.loadMoviesAndGenres()
         }
     }
     // MARK: - Fetches popular movies from the service.
-    private func fetchMovies() async throws -> [Movie] {
+    private func fetchPopularrMovies() async throws -> [Movie] {
         return try await movieService.fetchPopularMovies()
+    }
+    //MARK: -Fetches top rated movies from the service.
+    private func fetchTopRatedMovies() async throws -> [Movie] {
+        return try await movieService.fetchTopRatedMovies()
     }
     // MARK: - Fetches available genres from the service.
     private func fetchGenres() async throws -> [Genre] {

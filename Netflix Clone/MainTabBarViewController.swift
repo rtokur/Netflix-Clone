@@ -12,18 +12,23 @@ class MainTabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        view.backgroundColor = .systemBackground
+        //MARK: -Main Controllers
+        let vc1 = UINavigationController(rootViewController: HomeVC())
+        let vc2 = UINavigationController(rootViewController: FavoriteVC())
+        
+        //MARK: -TabBar Symbols
+        vc1.tabBarItem.image = UIImage(systemName: "house")
+        vc2.tabBarItem.image = UIImage(systemName: "heart")
+        
+        //MARK: -TabBar Titles
+        vc1.title = "Home"
+        vc2.title = "Favorites"
+        
+        tabBar.tintColor = .label
+        
+        //MARK: -Adding VC
+        setViewControllers([vc1,vc2], animated: true)
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
